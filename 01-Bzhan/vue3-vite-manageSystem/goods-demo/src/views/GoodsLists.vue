@@ -33,6 +33,27 @@
 </template>
 
 <script>
+import { reactive, onMounted } from "vue"
+function loadData (data) {
+  data.push(
+    {
+      date: '2016-05-02',
+      name: '王小虎',
+      address: '上海市普陀区金沙江路 1518 弄',
+    },
+    {
+      date: '2016-05-04',
+      name: '王小虎',
+      address: '上海市普陀区金沙江路 1517 弄',
+    },
+    {
+      date: '2016-05-01',
+      name: '王小虎',
+      address: '上海市普陀区金沙江路 1519 弄',
+    },
+  )
+  return data;
+}
 export default {
   // setup 是composition api的入口
   setup () {
@@ -43,32 +64,6 @@ export default {
     })
     return { tableData }
   },
-  // data () {
-  //   return {
-  //     tableData: [
-  //       {
-  //         date: '2016-05-02',
-  //         name: '王小虎',
-  //         address: '上海市普陀区金沙江路 1518 弄',
-  //       },
-  //       {
-  //         date: '2016-05-04',
-  //         name: '王小虎',
-  //         address: '上海市普陀区金沙江路 1517 弄',
-  //       },
-  //       {
-  //         date: '2016-05-01',
-  //         name: '王小虎',
-  //         address: '上海市普陀区金沙江路 1519 弄',
-  //       },
-  //       {
-  //         date: '2016-05-03',
-  //         name: '王小虎',
-  //         address: '上海市普陀区金沙江路 1516 弄',
-  //       },
-  //     ],
-  //   }
-  // }
 }
 </script>
 
