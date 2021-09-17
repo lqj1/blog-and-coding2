@@ -2,17 +2,27 @@ import Vue from 'vue'
 // 引入样式
 import 'element-ui/lib/theme-chalk/index.css';
 import {
-  Button
-} from 'element-ui'
-import {
+  Button,
   Form,
-  FormItem
+  FormItem,
+  Input,
+  Message,
+  Container,
+  Header,
+  Aside,
+  Main,
+  Menu,
+  Submenu,
+  MenuItem,
+  Breadcrumb,
+  BreadcrumbItem,
+  Card,
+  Row,
+  Col,
+  Table,
+  TableColumn,
+  Switch
 } from 'element-ui'
-import {
-  Input
-} from 'element-ui'
-import {
-  Message
-} from 'element-ui'
-Vue.use(Button).use(Form).use(FormItem).use(Input)
+// 全局引入
+Vue.use(Button).use(Form).use(FormItem).use(Input).use(Container).use(Header).use(Aside).use(Main).use(Menu).use(Submenu).use(MenuItem).use(Breadcrumb).use(BreadcrumbItem).use(Card).use(Row).use(Col).use(Table).use(TableColumn).use(Switch)
 Vue.prototype.$message = Message
