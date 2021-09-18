@@ -141,6 +141,7 @@ this.$router.push('/login');
 - 推送本地分支到远程：切换到要推送的分支，`git push -u origin login`, 最后的 login 表示要推动到远程分支新起的名字
 - 合并分支： 先切换到要合并到的主分支，`git checkout master`
 - 然后 `git merge login`，就可以合并 login 到当前分支
+- 再把本地 master 分支的代码推送到云端，因为云端已经有了，所以不需要使用 -u，直接 `git push`
 
 ### 主页布局、侧边栏数据请求
 
