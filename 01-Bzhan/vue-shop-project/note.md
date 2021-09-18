@@ -135,11 +135,12 @@ this.$router.push('/login');
 
 ### git 常规操作
 
-- 查看分支： git branch
-- 切换分支： git checkout login
-- 切换并创建分支：git checkout -b user
-- 合并分支： 先切换到要合并到的主分支，然后 git merge login，就可以合并 login 到当前分支
-- 推送本地分支到远程：切换到要推送的分支，git push -u origin login, 最后的 login 表示要推动到远程分支新起的名字
+- 查看分支： `git branch`
+- 切换分支： `git checkout login`
+- 切换并创建分支：`git checkout -b user`
+- 推送本地分支到远程：切换到要推送的分支，`git push -u origin login`, 最后的 login 表示要推动到远程分支新起的名字
+- 合并分支： 先切换到要合并到的主分支，`git checkout master`
+- 然后 `git merge login`，就可以合并 login 到当前分支
 
 ### 主页布局、侧边栏数据请求
 
