@@ -1,3 +1,19 @@
+## 前端技术栈
+
+- vue
+- vue-router
+- element-ui
+- axios
+- echarts
+
+## 后端技术栈
+
+- node.js
+- express
+- jwt
+- mysql
+- sequelize
+
 ## 1. 登录/退出功能
 
 ### 登录业务流程
@@ -120,7 +136,8 @@ this.$router.push('/login');
 ### git 常规操作
 
 - 查看分支： git branch
-- 切换分支： git checkout login，没有的时候就会新建
+- 切换分支： git checkout login
+- 切换并创建分支：git checkout -b user
 - 合并分支： 先切换到要合并到的主分支，然后 git merge login，就可以合并 login 到当前分支
 - 推送本地分支到远程：切换到要推送的分支，git push -u origin login, 最后的 login 表示要推动到远程分支新起的名字
 
@@ -166,7 +183,7 @@ axios.interceptors.request.use(config => {
 - 通过 default-active 设置激活菜单的 index，如果是自定义导航路径，则需要手动设置 index 的值才能高亮，比如 :default-active="/users"，则用户列表的菜单项就会一直高亮
 - 为实现点击高亮的效果，然后刷新之后仍然高亮，就需要将这个路径的值保存在 sessionStorage 中，在 created 中赋值给 default-active，然后刷新之后就可以存在
 
-#### 用户列表的开发
+### 用户列表的开发
 
 - 面包屑导航
 - el-table 表格渲染数据，通过 border 添加边框，stripe 设置斑马纹（隔行变色）
@@ -181,3 +198,121 @@ axios.interceptors.request.use(config => {
   </template>
 </el-table-column>
 ```
+
+- Tooltip 是 element 常用的提示框，包裹在其他按钮等外面就可以使用，使用 :enterable="false"，就可以使弹出框不遮挡其他
+- 渲染表格之后，修改表格中的数据之后（如 switch 开关），刷新后页面还是之前的状态，没有同步更新到后端
+
+  - 监听 switch 的 change 事件
+
+#### 查询
+
+- 输入框输入内容，点击搜索查询。el-input 输入框 v-model 绑定查询字符串，搜索按钮绑定查询的接口函数
+  - 优化：输入框添加 clearable，点击后清空输入框，还需要绑定 clear 事件，才可以在清空后再查询
+
+#### 验证表单
+
+- 验证规则
+
+```javascript
+addFormRules: {
+  username: [
+    { required: true, message: '请输入用户名称', trigger: 'blur' },
+    { min: 3, max: 10, message: '用户名长度在3~10之间', trigger: 'blur' }
+  ],
+  email: [
+    { required: true, message: '请输入邮箱', trigger: 'blur' },
+    { validator: checkEmail, trigger: 'blur' } // 自定义验证规则
+  ],
+  mobile: [
+    { required: true, message: '请输入手机', trigger: 'blur' },
+    { validator: checkMobile, trigger: 'blur' }
+  ]
+}
+```
+
+- 自定义验证规则
+  - 在 addFormRules 通过 validator 添加方法
+  - 在 data 中，data 的 return 外面通过 var 定义验证的规则
+
+```javascript
+// 验证邮箱的规则
+var checkEmail = (rule, value, cb) => {
+  // 验证邮箱的正则表达式
+  const regEmail = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
+  if (regEmail.test(value)) {
+    // 合法的邮箱，直接返回 cb()
+    return cb();
+  }
+  // 不合法，通过cb返回 new Error()
+  cb(new Error('请输入合法的邮箱'));
+};
+// 验证手机号的规则
+var checkMobile = (rule, value, cb) => {
+  const regMobile = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
+  if (regMobile.test(value)) {
+    return cb();
+  }
+  cb(new Error('请输入合法的手机号'));
+};
+```
+
+#### 重置表单
+
+- 有时候再表单某些项不通过的时候，会提示信息，或者填入的信息，在点击取消之后，再打开的时候，还是会显示，这时候需要对表单进行重置，主要步骤包括如下：
+  - 对表单进行关闭事件监听，在 el-dialog 标签中，添加 @close 事件
+  - 关闭事件中进行重置，通过 ref 获取指定的表单，然后调用自有方法 this.$refs.ruleFormRef.resetFields()
+
+#### 提交前的预验证
+
+```javascript
+ addUser () {
+  this.$refs.ruleFormRef.validate(valid => {
+    if (!valid) return
+    // 通过就发起添加用户的网络请求
+  })
+}
+```
+
+#### 删除用户信息，提示插件全局绑定
+
+- 删除之前弹出确认提示框，提示用户是否进一步操作，防止用户误删除
+- 为组件绑定 $confirm 引用，可以直接调用 this.$confirm 使用，与 message 同样的原理
+
+```javascript
+import { Message, MessageBox } from 'element-ui';
+// Vue.use(Dialog) // 这种是针对普通的插件
+Vue.prototype.$message = Message;
+Vue.prototype.$confirm = MessageBox.confirm;
+```
+
+- 封装删除函数
+
+```javascript
+// 根据id删除对应的用户
+async removeUserById (id) {
+  // 弹框询问是否删除
+  const confirmResult = await this.$confirm('此操作将永久删除该用户，是否继续？', '删除用户', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).catch(err => err) // 捕获错误并返回
+  // 如果用户确认删除，返回值为字符串 confirm
+  // 如果用户取消了删除，则返回值为字符串 cancel
+  // console.log(confirmResult);
+  if (confirmResult !== 'confirm') {
+    // 证明用户取消了， 不想删除
+    return this.$message.info('已取消删除')
+  }
+  console.log('确认了删除');
+  // 调用删除的接口
+  const { data: res } = await this.$http.delete('users/' + id)
+  if (res.meta.status !== 200) {
+    return this.$message.error('删除用户失败！')
+  }
+  this.$message.success('删除用户成功！')
+  // 刷新列表
+  this.getUserList()
+}
+```
+
+### 权限管理的开发
