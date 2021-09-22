@@ -318,6 +318,7 @@ async removeUserById (id) {
 ```
 
 ### 权限管理的开发
+
 - 表格中添加**展开列**和**索引列**
 
 ```javascript
@@ -330,3 +331,40 @@ async removeUserById (id) {
   <el-table-column type="index"></el-table-column>
 </el-table>
 ```
+
+- 通过设置 `min-width` 可以给页面整体设置最小宽度，从而避免缩放之后的页面布局改变，换行等
+- confirm 组件的使用，通过 await 接收返回值，并判断结果
+
+```javascript
+async removeRightById() {
+  // 弹框提示用户是否删除
+  const confirmResult = await this.$confirm('此操作将永久删除该文件,是否继续?', '删除用户权限', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).catch(err=>err)
+  if (confirmResult !== 'confirm') {
+    return this.$message.info('取消删除！')
+  }
+  console.log('确认删除！');
+}
+```
+
+#### 分配权限
+
+- el-tree 控件
+  - 通过 `:props="treeProps"` 指定显示的格式
+  - 如下： 数据中的 authName 是显示的标签名， children 表示子节点
+
+```javascript
+treeProps: {
+  label: 'authName',
+  children: 'children'
+}
+```
+
+- el-tree 属性
+  - show-checkbox: 前面展示选择框
+  - node-key: 指定 id 等作为传送的值，而不是显示的文本
+  - default-expand-all: 打开之后展开所有的节点
+  - default-checked-keys: 默认勾选的节点的 key 的数组
