@@ -31,14 +31,14 @@ const routes = [{
         component: () => import('../components/user/User.vue')
       },
       {
-        path: '/rights',
-        name: 'Rights',
-        component: () => import('../components/power/Rights.vue')
-      },
-      {
         path: '/roles',
         name: 'Roles',
         component: () => import('../components/power/Roles.vue')
+      },
+      {
+        path: '/rights',
+        name: 'Rights',
+        component: () => import('../components/power/Rights.vue')
       }
     ]
   },

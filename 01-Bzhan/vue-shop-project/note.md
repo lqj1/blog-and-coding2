@@ -318,3 +318,15 @@ async removeUserById (id) {
 ```
 
 ### 权限管理的开发
+- 表格中添加**展开列**和**索引列**
+
+```javascript
+<el-table :data="roleList" border stripe>
+  <el-table-column type="expand">
+    <template slot-scope="scope">
+      {{scope.row}}
+    </template>
+  </el-table-column>
+  <el-table-column type="index"></el-table-column>
+</el-table>
+```
