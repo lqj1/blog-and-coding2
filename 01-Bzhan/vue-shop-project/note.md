@@ -318,3 +318,32 @@ async removeUserById (id) {
 ```
 
 ### 权限管理的开发
+
+#### 子页面的编写
+
+```javascript
+// router.js
+{
+    path: '/home',
+    name: 'Home',
+    redirect: '/welcome',
+    component: () => import('../components/Home.vue'),
+    children: [{
+        path: '/welcome',
+        name: 'Welcome',
+        component: () => import('../components/Welcome.vue')
+      },
+      {
+        path: '/users',
+        name: 'User',
+        component: () => import('../components/user/User.vue')
+      },
+    ]
+}
+// Home.vue
+<el-container>
+  <el-main>
+    <router-view></router-view>
+  </el-main>
+</el-container>
+```
