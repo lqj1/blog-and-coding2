@@ -349,3 +349,24 @@ async removeUserById (id) {
   </el-main>
 </el-container>
 ```
+
+### el-tree 组件
+
+```javascript
+<el-tree :data="rightslist" :props="treeProps" show-checkbox node-key="id" default-expand-all :default-checked-keys="defKeys" ref="treeRef"></el-tree>
+```
+
+- `:data`定义数据
+- `:props`定义数据格式, 如下的 authName 表示标签名字，children 表示子节点
+
+```javascript
+treeProps: {
+  label: 'authName',
+  children: 'children'
+},
+```
+
+- `default-checked-keys` 表示勾选的节点
+- `node-key` 用来标识节点的唯一性
+- `getCheckedKeys` 获取所有已选中的节点
+- `getHalfCheckedkeys` 获取半选中的节点
