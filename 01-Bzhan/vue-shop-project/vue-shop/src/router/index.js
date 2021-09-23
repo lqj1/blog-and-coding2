@@ -39,10 +39,14 @@ const routes = [{
         path: '/rights',
         name: 'Rights',
         component: () => import('../components/power/Rights.vue')
-      }
+      },
+      {
+        path: '/categories',
+        name: 'Categories',
+        component: () => import('../components/goods/Cate.vue')
+      },
     ]
   },
-
 ]
 
 const router = new VueRouter({

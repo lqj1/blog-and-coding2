@@ -350,7 +350,7 @@ async removeUserById (id) {
 </el-container>
 ```
 
-### el-tree 组件
+#### el-tree 组件
 
 ```javascript
 <el-tree :data="rightslist" :props="treeProps" show-checkbox node-key="id" default-expand-all :default-checked-keys="defKeys" ref="treeRef"></el-tree>
@@ -370,3 +370,113 @@ treeProps: {
 - `node-key` 用来标识节点的唯一性
 - `getCheckedKeys` 获取所有已选中的节点
 - `getHalfCheckedkeys` 获取半选中的节点
+
+### 分类管理的开发
+
+#### git 操作
+
+- 创建并切换到新的分支：`git checkout -b goods_cate`
+- 将分支推送到云端：`git push -u origin goods_cate`
+  - 如果远端没有该分支，就需要添加 -u
+
+#### 开始开发
+
+- 插件 vue-table-with-tree-grid
+
+```javascript
+// main.js
+// 导入插件
+import TreeTable from 'vue-table-with-tree-grid';
+// 注册为全局可用组件
+Vue.component('tree-table', TreeTable);
+```
+
+#### vue-table-with-tree-grid 插件
+
+```javascript
+<tree-table class="treeTable" :data="catelist" :columns="columns" :selection-type="false" :expand-type="false" show-index index-text="#" border :show-row-hover="false">
+  // <!-- 是否有效 -->
+  <template slot="isok" slot-scope="scope">
+    <i class="el-icon-success" v-if="scope.row.cat_deleted === false" style="color: lightgreen"></i>
+    <i class="el-icon-error" v-else style="color: red"></i>
+  </template>
+  // <!-- 排序 -->
+  <template slot="order" slot-scope="scope">
+    <el-tag size="mini" v-if="scope.row.cat_level === 0">一级</el-tag>
+    <el-tag size="mini" v-else-if="scope.row.cat_level === 1">二级</el-tag>
+    <el-tag size="mini" v-else="scope.row.cat_level === 2">三级</el-tag>
+  </template>
+  // <!-- 操作 -->
+  <template slot="opt" slot-scope="scope">
+    <el-button type="primary" icon="el-icon-edit" size="mini">编辑</el-button>
+    <el-button type="danger" icon="el-icon-delete" size="mini">删除</el-button>
+  </template>
+</tree-table>
+```
+
+- `·data`数据
+- `columns`表格各列的配置
+  - label: 列标题
+
+```javascript
+// 在data中
+columns: [
+  {
+    label: '分类名称', // 列标题
+    prop: 'cat_name', // 属性名
+  },
+  {
+    label: '是否有效',
+    type: 'template', // 表示将当前列定义为模板列
+    // 表示当前列用的模板名称
+    template: 'isok',
+  },
+  {
+    label: '排序',
+    type: 'template', // 表示将当前列定义为模板列
+    // 表示当前列用的模板名称
+    template: 'order',
+  },
+  {
+    label: '操作',
+    type: 'template', // 表示将当前列定义为模板列
+    // 表示当前列用的模板名称
+    template: 'opt',
+  },
+];
+```
+
+- selection-type: 是否为多选类型表格
+
+#### 分页
+
+- 使用 element 提供的插件
+
+```js
+// data
+queryInfo: { // 查询条件
+  type: 3,
+  pagenum: 1,
+  pagesize: 5
+  total: null // 通过请求后端数据赋值
+},
+// template
+<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+  :current-page="queryInfo.pagenum" :page-sizes="[3, 5, 10, 15]" :page-size="queryInfo.pagesize"
+  layout="total, sizes, prev, pager, next, jumper" :total="queryInfo.total">
+</el-pagination>
+// js
+// 监听pagesize改变
+handleSizeChange (newSize) {
+  this.queryInfo.pagesize = newSize
+  // 数据发生变化后重新请求
+  this.getCateList()
+},
+// 监听pagenum改变
+handleCurrentChange (newPage) {
+  this.queryInfo.pagenum = newPage
+  this.getCateList()
+}
+```
+
+#### 分类管理（可用于淘宝京东等的左侧）
