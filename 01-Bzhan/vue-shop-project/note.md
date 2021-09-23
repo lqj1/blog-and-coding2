@@ -142,6 +142,8 @@ this.$router.push('/login');
 - 合并分支： 先切换到要合并到的主分支，`git checkout master`
 - 然后 `git merge login`，就可以合并 login 到当前分支
 - 再把本地 master 分支的代码推送到云端，因为云端已经有了，所以不需要使用 -u，直接 `git push`
+- 删除本地分支 `git branch -d user`
+- 删除远程分支 `git push origin --delete user`
 
 ### 主页布局、侧边栏数据请求
 
