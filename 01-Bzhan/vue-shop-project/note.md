@@ -479,4 +479,25 @@ handleCurrentChange (newPage) {
 }
 ```
 
-#### 分类管理（可用于淘宝京东等的左侧）
+### 分类管理（可用于淘宝京东等的左侧）
+
+### element 的级联选择器 el-cascader
+
+```javascript
+<el-cascader v-model="selectKeys" expand-trigge="hover" :options="parentsCateList" :props="cascaderProps" @change="handleChange"></el-cascader>
+```
+
+- 其中 options 表示数据
+- expand-trigge="hover": 展开方式
+- 由于可以将各个级别的标签都选上，所以 v-model 绑定了 selectKeys 的数组
+- props 用来指定配置对象
+  - value: 指定选项的值为选项对象的某个属性值
+  - label: 指定选项标签为选项对象的某个属性值
+  - children: 指定选项的子选项为选项对象的某个属性值
+  - disabled: 指定选项的禁用为选项对象的某个属性值
+- clearable: 清空选项
+- change-on-select: 是否允许选择任意一级选项
+
+### 弹出框的取消
+
+- 注意需要给弹出框的取消绑定事件 @close, 并清空输入框中的填入的值

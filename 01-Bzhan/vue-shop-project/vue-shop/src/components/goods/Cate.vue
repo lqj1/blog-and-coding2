@@ -40,17 +40,21 @@
       </el-pagination>
     </el-card>
     <!-- 添加分类对话框 -->
-    <el-dialog title="添加分类" :visible.sync="addCateDialogVisible" width="50%">
+    <el-dialog title="添加分类" :visible.sync="addCateDialogVisible" width="50%" @close="addCateDialogClosed">
       <el-form :model="addCateForm" :rules="addCateFormRules" ref="addCateFormRef" label-width="100px">
         <el-form-item label="分类名称" prop="cat_name">
           <el-input v-model="addCateForm.cat_name"></el-input>
         </el-form-item>
         <el-form-item label="父级分类" prop="cat_name">
+          <!-- options用来指定数据源 -->
+          <el-cascader v-model="selectKeys" expand-trigger="hover" :options="parentsCateList" :props="cascaderProps"
+            @change="parentCateChanged" clearable>
+          </el-cascader>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addCateDialogVisible = false">取 消</el-button>
-        <el-button type="primary">确 定</el-button>
+        <el-button type="primary" @click="addCate">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -114,6 +118,12 @@ export default {
         ],
       },
       parentsCateList: [], // 父级分类的数据列表
+      cascaderProps: {
+        value: 'cat_id',
+        label: 'cat_name',
+        children: 'children'
+      },
+      selectKeys: [], // 选中的父级分类的id数组
     }
   },
   created () {
@@ -160,8 +170,42 @@ export default {
       if (res.meta.status !== 200) {
         return this.$message.error('获取父级分类错误！')
       }
-      // console.log('res', res);
       this.parentsCateList = res.data
+    },
+    // 选择项发生变化触发这个函数
+    parentCateChanged () {
+      // 选项发生变化，如果selectKeys长度大于零，表示选中的父级分类
+      // 反之，表示没有选中任何分类
+      if (this.selectKeys.length > 0) {
+        // 最后一项表示父级的最后一级分类，也就是新增的父级的id
+        this.addCateForm.cat_pid = this.selectKeys[this.selectKeys.length - 1]
+        // 对应的level也需要发生改变，level与数组长度一致
+        this.addCateForm.cat_level = this.selectKeys.length
+        return
+      } else {
+        this.addCateForm.cat_pid = 0
+        this.addCateForm.cat_level = 0
+      }
+    },
+    // 点击按钮，添加新的分类
+    addCate () {
+      this.$refs.addCateFormRef.validate(async valid => {
+        if (!valid) { return }
+        const { data: res } = await this.$http.post('categories', this.addCateForm)
+        if (res.meta.status !== 201) {
+          return this.$message.error('添加分类失败！')
+        }
+        this.$message.success('添加分类成功！')
+        this.getCateList()
+        this.addCateDialogVisible = false
+      })
+    },
+    // 监听添加分类对话框关闭
+    addCateDialogClosed () {
+      this.$refs.addCateFormRef.resetFields()
+      this.selectKeys = []
+      this.addCateForm.cat_level = 0
+      this.addCateForm.cat_pid = 0
     }
   }
 }
@@ -170,5 +214,8 @@ export default {
 <style lang="less" scoped>
 .treeTable {
   margin-top: 15px;
+}
+.el-cascader  {
+  width: 100%;
 }
 </style>
