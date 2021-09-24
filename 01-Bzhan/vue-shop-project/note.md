@@ -487,17 +487,77 @@ handleCurrentChange (newPage) {
 <el-cascader v-model="selectKeys" expand-trigge="hover" :options="parentsCateList" :props="cascaderProps" @change="handleChange"></el-cascader>
 ```
 
-- 其中 options 表示数据
-- expand-trigge="hover": 展开方式
+- 其中 `options` 表示数据
+- `expand-trigge="hover"`: 展开方式--**已经弃用**
 - 由于可以将各个级别的标签都选上，所以 v-model 绑定了 selectKeys 的数组
-- props 用来指定配置对象
+- `props` 用来指定配置对象
   - value: 指定选项的值为选项对象的某个属性值
   - label: 指定选项标签为选项对象的某个属性值
   - children: 指定选项的子选项为选项对象的某个属性值
   - disabled: 指定选项的禁用为选项对象的某个属性值
-- clearable: 清空选项
-- change-on-select: 是否允许选择任意一级选项
+  - expandTrigger: 'hover': 指定展开方式
+- `clearable`: 清空选项
+- `change-on-select`: 是否允许选择任意一级选项
 
-### 弹出框的取消
+```javascript
+cateProps: {
+  value: 'cat_id',
+  label: 'cat_name',
+  children: 'children',
+  expandTrigger: 'hover'
+},
+```
 
-- 注意需要给弹出框的取消绑定事件 @close, 并清空输入框中的填入的值
+#### 弹出框的取消
+
+- 注意需要给弹出框的取消绑定事件 `@close`, 并清空输入框中的填入的值
+
+### 参数管理
+
+#### 分类
+
+- 静态参数和动态参数：静态参数指的是商品的尺寸、颜色等，静态参数就是该手机或其他的品牌型号等不可更改的参数
+- 警告框, `el-alert`
+
+```javascript
+//  <!-- 头部的警告区 -->
+<el-alert title="注意：只允许为第三级分类设置相关参数" type="warning" :closable="false" show-icon></el-alert>
+```
+
+- Tab 标签页, `el-tab`
+
+- 展开行添加数据
+  - 在展开行通过作用域插槽的方式接收数据
+
+```javascript
+//  <!-- 展开行 -->
+<el-table-column type="expand">
+  <template slot-scope="scope">
+    <el-tag v-for="(item,i) in scope.row.attr_vals" :key="i">{{item}}</el-tag>
+  </template>
+</el-table-column>
+```
+
+#### 数组分割考虑的 bug
+
+- 在对某个字符串进行分割的时候，需要考虑空字符串的时候，这时候分割会返回一个包含空字符串的数组
+- 所以需要对其进行判断，当是空字符串的时候，就返回空数组
+
+#### 动态编辑标签
+
+- 对于表格中，同一个布尔值控制的变量，有时候会出现一变化，所有都变化，这时候可以在获取数据的时候，通过循环给每个数据设置一个布尔值，后期通过模板中的 `scope.row.value` 来控制每一条数据
+- `this.$nextTick`: 当页面上的元素被重新渲染之后，才会执行回调函数中的代码
+
+```javascript
+// 点击按钮，展示文本输入框
+showInput (row) {
+  // 这里让文本显示，但是页面中展示的还是原来的按钮，而不是文本框
+  row.inputVisible = true
+  // 让文本框自动获得焦点
+  this.$nextTick(_ => {
+    this.$refs.saveTagInput.$refs.input.focus();
+  });
+}
+```
+
+- 比如上面的代码，如果不放在 nextTick 中，有时候可能页面中还没有渲染出 input，就获取不到那个元素

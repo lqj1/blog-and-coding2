@@ -47,7 +47,7 @@
         </el-form-item>
         <el-form-item label="父级分类" prop="cat_name">
           <!-- options用来指定数据源 -->
-          <el-cascader v-model="selectKeys" expand-trigger="hover" :options="parentsCateList" :props="cascaderProps"
+          <el-cascader v-model="selectKeys" :options="parentsCateList" :props="cascaderProps"
             @change="parentCateChanged" clearable>
           </el-cascader>
         </el-form-item>
@@ -121,7 +121,8 @@ export default {
       cascaderProps: {
         value: 'cat_id',
         label: 'cat_name',
-        children: 'children'
+        children: 'children',
+        expandTrigger: 'hover'
       },
       selectKeys: [], // 选中的父级分类的id数组
     }
