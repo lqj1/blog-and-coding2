@@ -561,3 +561,126 @@ showInput (row) {
 ```
 
 - 比如上面的代码，如果不放在 nextTick 中，有时候可能页面中还没有渲染出 input，就获取不到那个元素
+
+### 商品列表开发
+
+#### git 操作
+
+- 创建新分支 `git checkout -b goods_list`
+- 记得推送到云端 `git push -u origin goods_list`
+
+#### 全局过滤器
+
+- 在 main.js 中配置全局过滤器
+- 全局格式化时间的过滤器
+
+```javascript
+// main.js
+Vue.filter('dataFormat', function (originVal) {
+  // 根据给定时间得到时间对象
+  const dt = new Date(originVal);
+  const y = dt.getFullYear();
+  // 日期需要加1，加空格变为字符串，padStart保持2位，不足前面补0
+  const m = (dt.getMonth() + 1 + '').padStart(2, '0');
+  const d = (dt.getDate() + '').padStart(2, '0');
+  const hh = (dt.getHours() + '').padStart(2, '0');
+  const mm = (dt.getMinutes() + '').padStart(2, '0');
+  const ss = (dt.getSeconds() + '').padStart(2, '0');
+  // return `yyyy-mm-dd hh:mm:ss`
+  return `${y}-${m}-${d} ${hh}:${mm}:${ss}`;
+});
+// 在vue文件中使用
+<el-table-column label="商品创建时间">
+  <template slot-scope="scope">
+    {{scope.row.add_time | dataFormat}}
+  </template>
+</el-table-column>
+```
+
+#### 步骤条 el-step
+
+- 引入 Steps、Step
+
+```javascript
+<el-steps :space="200" :active="1" finish-status="success" align-center>
+  <el-step title="基本信息"></el-step>
+  <el-step title="商品参数"></el-step>
+  <el-step title="完成"></el-step>
+</el-steps>
+```
+
+- active 是激活的项
+
+#### 居左显示的 tab
+
+```javascript
+<el-tabs :tab-position="'left'" style="height: 200px;">
+  <el-tab-pane label="用户管理">用户管理</el-tab-pane>
+  <el-tab-pane label="配置管理">配置管理</el-tab-pane>
+  <el-tab-pane label="角色管理">角色管理</el-tab-pane>
+  <el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane>
+</el-tabs>
+```
+
+#### 步骤条与 tab 面板联动
+
+```javascript
+// <!-- 步骤条 -->
+// 这里减去0可以将字符串变成数字
+<el-steps :space="200" :active="activeIndex-0" finish-status="success" align-center>
+  <el-step title="基本信息"></el-step>
+  <el-step title="商品参数"></el-step>
+  <el-step title="商品属性"></el-step>
+  <el-step title="商品图片"></el-step>
+  <el-step title="商品内容"></el-step>
+  <el-step title="完成"></el-step>
+</el-steps>
+// <!-- Tab区域 -->
+ <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="100px" label-position="top">
+  <el-tabs :tab-position="'left'" style="height: 200px;" v-model="activeIndex">
+    <el-tab-pane label="基本信息" name="0">
+      <el-form-item label="商品名称" prop="goods_name">
+        <el-input v-model="addForm.goods_name"></el-input>
+      </el-form-item>
+       <el-form-item label="商品价格" prop="goods_price">
+        <el-input v-model="addForm.goods_price" type="number"></el-input>
+      </el-form-item>
+    </el-tab-pane>
+    <el-tab-pane label="商品参数" name="1">
+      //  <!-- 渲染表单的item项 -->
+      <el-form-item :label="item.attr_name" v-for="item in manyTableData" :key="item.attr_id">
+        // <!-- 复选框组 -->
+        <el-checkbox-group v-model="item.attr_vals">
+          <el-checkbox :label="cb" v-for="(cb,i) in item.attr_vals" :key="i"></el-checkbox>
+        </el-checkbox-group>
+      </el-form-item>
+    </el-tab-pane>
+    <el-tab-pane label="商品属性" name="2">商品属性</el-tab-pane>
+    <el-tab-pane label="商品图片" name="3">商品图片</el-tab-pane>
+    <el-tab-pane label="商品内容" name="4">商品内容</el-tab-pane>
+  </el-tabs>
+</el-form>
+```
+
+- 让两个组件共用一个 activeIndex，就可以实现联动切换
+- tab 中`v-model`绑定的属性是与 `name` 属性 对应
+- `form`包裹`el-tabs`再包裹`el-form-item`(**重要**)
+- `label-position="top"`可以设置**标签文本**和**input 输入**上下显示
+- `type="number"` 控制输入框只能输入数字
+- el-tag 的事件`:before-leave`
+
+```javascript
+// 切换标签页前的判断
+beforeTabLeave (activeName, oldActiveName) {
+  // activeName: 即将进入的标签页的name
+  // oldActiveName: 离开的标签页的name
+  if (oldActiveName === '0' && this.addForm.goods_cat.length !== 3) {
+    // 没有选择第三级标签，不符合条件，不让进入下一个选项
+    this.$message.error('请先选择商品分类！')
+    return false
+  }
+}
+```
+
+- `@tab-click` tab 被选中时触发的事件
+- `border`可以给`el-checkout`添加样式

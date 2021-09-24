@@ -25,3 +25,12 @@ body,
   display: flex;
   align-items: center;
 }
+.el-pagination {
+  margin-top: 15px;
+}
+.el-steps {
+  margin: 15px 0;
+}
+.el-step__title {
+  font-size: 13px;
+}

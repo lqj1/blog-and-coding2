@@ -46,6 +46,16 @@ const routes = [{
         component: () => import('../components/goods/Cate.vue')
       },
       {
+        path: '/goods',
+        name: 'Goods',
+        component: () => import('../components/goods/List.vue')
+      },
+      {
+        path: '/goods/add',
+        name: 'Add',
+        component: () => import('../components/goods/Add.vue')
+      },
+      {
         path: '/params',
         name: 'Params',
         component: () => import('../components/goods/Params.vue')
