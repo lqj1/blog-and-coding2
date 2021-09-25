@@ -684,3 +684,59 @@ beforeTabLeave (activeName, oldActiveName) {
 
 - `@tab-click` tab 被选中时触发的事件
 - `border`可以给`el-checkout`添加样式
+
+#### 上传图片
+
+```javascript
+<el-upload :action="uploadURL" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList"
+  list-type="picture" :headers="headerObj" :on-success="handleSuccess">
+  <el-button size="small" type="primary">Click to upload</el-button>
+  <template #tip>
+    <div class="el-upload__tip">
+      jpg/png files with a size less than 500kb
+    </div>
+  </template>
+</el-upload>
+
+// 处理图片预览效果
+handlePreview () {},
+// 处理移除图片的操作
+handleRemove (file) {
+  // file是将要移除图片的信息，包括临时路径
+  // 1. 获取将要删除的图片的临时路径
+  const filePath = file.response.data.tmp_path
+  // 2. 从 pics 数组中，找到这个图片对应的索引值
+  const i = this.addForm.pics.findIndex(item => item.pic === filePath)
+  // 3. 调用数组的 splice 方法，把图片信息对象从pics数组中移除
+  this.addForm.pics.splice(i,1)
+
+}
+// 监听图片上传成功事件，可以拿到服务器传的临时路径
+handleSuccess (res) {
+  // 1. 拼接得到图片信息对象
+  const picInfo = { pic: res.data.tmp_path }
+  // 2. 将图片信息对象push到数组中
+  this.addForm.pics.push(picInfo)
+}
+```
+
+- `:file-list="fileList"` 文件列表
+- ` list-type="picture"` 预览图片的呈现方式
+- 我们曾经在 main.js 中定义了请求头中携带 token 信息
+
+```javascript
+axios.interceptors.request.use(config => {
+  config.headers.Authorization = window.sessionStorage.getItem('token');
+  return config;
+});
+```
+
+- 而 `el-upload` 组件在内部自己封装了一套请求方式，但没有调用 axios，所以这里的请求不会有 token 发送
+- 在 `el-upload` 中有 header 的属性，可以在这里添加 token 信息
+  - data 中定义如下：
+
+```javascript
+headerObj: {
+  Authorization: window.sessionStorage.getItem('token')
+}, // 图片上传组件的headers请求头对象
+```

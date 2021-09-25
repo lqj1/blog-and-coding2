@@ -53,9 +53,16 @@
           </el-tab-pane>
           <el-tab-pane label="商品属性" name="2">
             <el-form-item :label="item.attr_name" v-for="item in onlyTableData" :key="item.attr_id">
+              <el-input v-model="item.attr_vals"></el-input>
             </el-form-item>
           </el-tab-pane>
-          <el-tab-pane label="商品图片" name="3">商品图片</el-tab-pane>
+          <el-tab-pane label="商品图片" name="3">
+            <!-- action表示图片要上传的后台地址 -->
+            <el-upload :action="uploadURL" :on-preview="handlePreview" :on-remove="handleRemove" list-type="picture"
+              :headers="headerObj" :on-success="handleSuccess">
+              <el-button size="small" type="primary">点击上传</el-button>
+            </el-upload>
+          </el-tab-pane>
           <el-tab-pane label="商品内容" name="4">商品内容</el-tab-pane>
         </el-tabs>
       </el-form>
@@ -74,7 +81,8 @@ export default {
         goods_weight: 0,
         goods_number: 0,
         // 商品所属的分类数组
-        goods_cat: []
+        goods_cat: [],
+        pics: [], // 图片数组
       }, // 添加商品的表单对象
       addFormRules: {
         goods_name: [
@@ -113,6 +121,10 @@ export default {
       },
       manyTableData: [], // 动态参数列表数据
       onlyTableData: [], // 静态属性列表数据
+      uploadURL: 'https://lianghj.top:8888/api/private/v1/upload', // 上传的图片地址
+      headerObj: {
+        Authorization: window.sessionStorage.getItem('token')
+      }, // 图片上传组件的headers请求头对象
     }
   },
   created () {
@@ -173,9 +185,32 @@ export default {
         if (res.meta.status !== 200) {
           return this.$message.error('获取静态属性列表失败！')
         }
-        console.log('res', res);
+        // console.log('res', res);
         this.onlyTableData = res.data
       }
+    },
+    // 处理图片预览效果
+    handlePreview () {
+
+    },
+    // 处理移除图片的操作
+    handleRemove (file) {
+      // file是将要移除图片的信息，包括临时路径
+      // 1. 获取将要删除的图片的临时路径
+      const filePath = file.response.data.tmp_path
+      // 2. 从 pics 数组中，找到这个图片对应的索引值
+      const i = this.addForm.pics.findIndex(item => item.pic === filePath)
+      // 3. 调用数组的 splice 方法，把图片信息对象从pics数组中移除
+      this.addForm.pics.splice(i, 1)
+      console.log('thjis.', this.addForm);
+    },
+    // 监听图片上传成功事件，可以拿到服务器传的临时路径
+    handleSuccess (res) {
+      // 1. 拼接得到图片信息对象
+      const picInfo = { pic: res.data.tmp_path }
+      // 2. 将图片信息对象push到数组中
+      this.addForm.pics.push(picInfo)
+      console.log('thjis1111', this.addForm);
     }
   },
   computed: {
