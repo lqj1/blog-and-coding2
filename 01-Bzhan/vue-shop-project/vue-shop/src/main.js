@@ -13,6 +13,13 @@ import './plugins/element'
 import './assets/css/global.css'
 // 导入插件
 import TreeTable from 'vue-table-with-tree-grid'
+// 导入富文本编辑器
+import VueQuillEditor from 'vue-quill-editor'
+// 导入对应的样式
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+
 // 导入axios包
 import axios from 'axios'
 axios.defaults.baseURL = 'https://lianghj.top:8888/api/private/v1/' // 配置请求的根路径
@@ -24,7 +31,8 @@ Vue.prototype.$http = axios // 这样就可以通过this.$http发起axios请求
 Vue.config.productionTip = false
 // 注册为全局可用组件
 Vue.component('tree-table', TreeTable)
-
+// 富文本编辑器的全局注册
+Vue.use(VueQuillEditor)
 Vue.filter('dataFormat', function (originVal) {
   // 根据给定时间得到时间对象
   const dt = new Date(originVal)
