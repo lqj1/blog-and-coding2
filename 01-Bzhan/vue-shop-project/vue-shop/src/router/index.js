@@ -60,6 +60,11 @@ const routes = [{
         name: 'Params',
         component: () => import('../components/goods/Params.vue')
       },
+      {
+        path: '/orders',
+        name: 'Order',
+        component: () => import('../components/order/Order.vue')
+      },
     ]
   },
 ]
