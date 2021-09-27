@@ -4,9 +4,8 @@
     <div class="order">
       <ul class="order_head">
         <li><span>地区:</span></li>
-        <li v-for="(item, index) in TarBar.TarBarArea"
-            :key="index" @click="PickClick(item, queryInfo.type, queryInfo.order)"
-            :class="{item_active: queryInfo.area === item}">
+        <li v-for="(item, index) in TarBar.TarBarArea" :key="index"
+          @click="PickClick(item, queryInfo.type, queryInfo.order)" :class="{item_active: queryInfo.area === item}">
           <span>{{ item }}</span>
         </li>
       </ul>
@@ -15,41 +14,35 @@
     <div class="order">
       <ul class="order_head">
         <li><span>类型:</span></li>
-        <li v-for="(item, index) in TarBar.TarBarType"
-            :key="index" @click="PickClick(queryInfo.area, item, queryInfo.order)"
-            :class="{item_active: queryInfo.type === item}">
+        <li v-for="(item, index) in TarBar.TarBarType" :key="index"
+          @click="PickClick(queryInfo.area, item, queryInfo.order)" :class="{item_active: queryInfo.type === item}">
           <span>{{ item }}</span>
         </li>
       </ul>
     </div>
-<!--    排序选择-->
+    <!--    排序选择-->
     <div class="order">
       <ul class="order_head">
         <li><span>排序:</span></li>
-        <li v-for="(item, index) in TarBar.TarBarOrder"
-            :key="index" @click="PickClick(queryInfo.area, queryInfo.type, item)"
-            :class="{item_active: queryInfo.order === item}">
+        <li v-for="(item, index) in TarBar.TarBarOrder" :key="index"
+          @click="PickClick(queryInfo.area, queryInfo.type, item)" :class="{item_active: queryInfo.order === item}">
           <span>{{ item }}</span>
         </li>
       </ul>
     </div>
 
-<!--    mv列表-->
+    <!--    mv列表-->
     <div class="items">
-      <div class="item"
-           v-for="(item, index) in list"
-           :key="item.id"
-           @click="mvItmeClick(item)"
-      >
-        <img  v-lazy="item.cover" alt="">
-<!--        播放数量-->
+      <div class="item" v-for="(item, index) in list" :key="item.id" @click="mvItmeClick(item)">
+        <img v-lazy="item.cover" alt="">
+        <!--        播放数量-->
         <div class="playCount">
           <span>
             <i class="iconfont icon-caret-right"></i>
             {{ item.playCount | ellipsisPlayVolume }}
           </span>
         </div>
-<!--        基本信息-->
+        <!--        基本信息-->
         <div class="info">
           <div class="title text_hidden">
             {{ item.name }}
@@ -60,16 +53,10 @@
         </div>
       </div>
     </div>
-<!--    分页器-->
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      background
-      :current-page="queryInfo.num"
-      :page-sizes="[8, 12, 16, 20]"
-      :page-size="queryInfo.limit"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="queryInfo.total">
+    <!--    分页器-->
+    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" background
+      :current-page="queryInfo.num" :page-sizes="[8, 12, 16, 20]" :page-size="queryInfo.limit"
+      layout="total, sizes, prev, pager, next, jumper" :total="queryInfo.total">
     </el-pagination>
   </div>
 </template>
@@ -101,7 +88,7 @@ export default {
   },
   methods: {
     mvItmeClick (item) {
-      console.log(item)
+      // console.log(item)
       this.$router.push(`/home/mvdetail/${item.id}`)
     },
     // 分类获取数据
@@ -111,7 +98,7 @@ export default {
       this.queryInfo.area = area
       this.queryInfo.type = type
       this.queryInfo.order = order
-      console.log(this.queryInfo)
+      // console.log(this.queryInfo)
       this.getMvAll()
     },
     // 获取 mv数据
@@ -142,63 +129,67 @@ export default {
 </script>
 
 <style scoped>
-/*
-  排序
-*/
-.order {
-  width: 100%;
-  height: 30px;
-  line-height: 30px;
-  margin: 10px 0;
-}
-.order_head {
-  display: block;
-}
-.order_head li {
-  float: left;
-  margin: 0 20px;
-}
-/*
-  mv列表
-*/
-.items {
-  margin-top: 10px;
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-}
-.item {
-  position: relative;
-  top: 0;
-  left: 0;
-  width: 23%;
-  margin: 10px 0;
-  overflow: hidden;
-}
-.item img {
-  width: 100%;
-  border-radius: 15px;
-}
-.playCount {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  color: #FFFFFF;
-  height: 20px;
-  line-height: 20px;
-  border-radius: 15px 15px 0 0;
-  text-align: right;
-  background: linear-gradient(to right,rgba(255, 255, 255, .01), rgba(0, 0, 0, .5))!important;
-}
-.playCount span {
-  margin: 2px 15px;
-}
-.text_hidden {
-  margin: 5px 0 0;
-  -webkit-line-clamp: 1
-}
-.author {
-  margin: 5px 0 0;
-}
+  /*
+          排序
+        */
+  .order {
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    margin: 10px 0;
+  }
+  .order_head {
+    display: block;
+  }
+  .order_head li {
+    float: left;
+    margin: 0 20px;
+  }
+  /*
+          mv列表
+        */
+  .items {
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  .item {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 23%;
+    margin: 10px 0;
+    overflow: hidden;
+  }
+  .item img {
+    width: 100%;
+    border-radius: 15px;
+  }
+  .playCount {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    color: #ffffff;
+    height: 20px;
+    line-height: 20px;
+    border-radius: 15px 15px 0 0;
+    text-align: right;
+    background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.01),
+      rgba(0, 0, 0, 0.5)
+    ) !important;
+  }
+  .playCount span {
+    margin: 2px 15px;
+  }
+  .text_hidden {
+    margin: 5px 0 0;
+    -webkit-line-clamp: 1;
+  }
+  .author {
+    margin: 5px 0 0;
+  }
 </style>

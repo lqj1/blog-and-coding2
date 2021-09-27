@@ -2,9 +2,9 @@
   <div class="items">
     <h1>{{ str }} ({{ list.length }})</h1>
     <div class="hotItem" v-for="(item, index) in list" :key="item.id">
-    <!--  头像  -->
+      <!--  头像  -->
       <div class="icon-wrap">
-        <img  v-lazy="item.user.avatarUrl" alt="">
+        <img v-lazy="item.user.avatarUrl" alt="">
       </div>
       <div class="comment">
         <div class="author">
@@ -17,7 +17,7 @@
         <div class="date">
           <span>{{ item.time | LocaleDateString }}</span>
           <span class="likecount">
-              <i class="iconfont icon-zan"></i> {{ item.likedCount }}
+            <i class="iconfont icon-zan"></i> {{ item.likedCount }}
           </span>
         </div>
       </div>
@@ -40,10 +40,10 @@ export default {
 </script>
 
 <style scoped>
-h1 {
-  font-size: 1.25rem;
-  margin: 10px 0;
-}
+  h1 {
+    font-size: 1.25rem;
+    margin: 10px 0;
+  }
   .items {
     width: 100%;
     margin-top: 20px;
@@ -81,13 +81,13 @@ h1 {
   }
   .name {
     margin-right: 5px;
-    color: #517EAF;
+    color: #517eaf;
   }
   .comment .re-comment {
     position: relative;
     margin: 10px 0 10px;
     line-height: 20px;
-    background: rgba(0, 0,0 , .1);
+    background: rgba(0, 0, 0, 0.1);
     padding: 10px 20px 5px;
   }
   .comment .date {
@@ -97,7 +97,7 @@ h1 {
   }
   .likecount {
     float: right;
-    color: #FF0000;
+    color: #ff0000;
   }
   .load {
     text-align: center;
