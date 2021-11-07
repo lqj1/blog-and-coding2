@@ -740,3 +740,42 @@ headerObj: {
   Authorization: window.sessionStorage.getItem('token')
 }, // 图片上传组件的headers请求头对象
 ```
+
+### 商品内容
+
+- 安装编辑工具， vue-quill-edit
+- `npm install vue-quill-editor –save`
+- `main.js` 中导入
+
+```javascript
+// 导入富文本编辑器
+import VueQuillEditor from 'vue-quill-editor';
+// 导入对应的样式
+import 'quill/dist/quill.core.css';
+import 'quill/dist/quill.snow.css';
+import 'quill/dist/quill.bubble.css';
+// 注册为全局可用组件
+Vue.use(VueQuillEditor);
+// vue 文件，通过标签直接使用，v-model绑定数据
+<quill-editor v-model="addForm.goods_introduce"></quill-editor>;
+```
+
+#### 提交表单的深拷贝
+
+```javascript
+add () {
+  this.$refs.addFormRef.validate(valid => {
+    if (!valid) {
+      return this.$message.error('请填写必要的表单项！')
+    }
+    // 执行添加的业务逻辑
+    // 由于这里修改了goods_cat之后，之前级联选择器绑定的数据就变成了字符串，所以就会报错
+    // 这里需要提交的表单数据 addForm 进行深拷贝
+    // 使用了包 lodash 的 cloneDeep
+    this.addForm.goods_cat = this.addForm.goods_cat.join(',')
+  })
+}
+```
+
+- 安装 lodash, `npm i --save lodash`
+- 在 vue 文件中引入, `import _ from 'lodash'`

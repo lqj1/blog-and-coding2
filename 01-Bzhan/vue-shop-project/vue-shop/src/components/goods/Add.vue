@@ -34,7 +34,7 @@
               <el-input v-model="addForm.goods_weight" type="number"></el-input>
             </el-form-item>
             <el-form-item label="商品数量" prop="goods_number">
-              <el-input v-model="addForm.goods_name"></el-input>
+              <el-input v-model="addForm.goods_number"></el-input>
             </el-form-item>
             <el-form-item label="商品分类" prop="goods_cat">
               <el-cascader v-model="addForm.goods_cat" :options="catelist" :props="cateProps" @change="handleChange"
@@ -63,14 +63,25 @@
               <el-button size="small" type="primary">点击上传</el-button>
             </el-upload>
           </el-tab-pane>
-          <el-tab-pane label="商品内容" name="4">商品内容</el-tab-pane>
+          <el-tab-pane label="商品内容" name="4">
+            <!-- 富文本编辑器 -->
+            <quill-editor v-model="addForm.goods_introduce">
+            </quill-editor>
+            <!-- 添加商品按钮 -->
+            <el-button type="primary" class="btn-add" @click="add">添加商品</el-button>
+          </el-tab-pane>
         </el-tabs>
       </el-form>
     </el-card>
+    <!-- 图片预览 -->
+    <el-dialog title="图片预览" :visible.sync="previewVisible" width="50%">
+      <img :src="previewPath" alt="" class="previewImg">
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import _ from 'lodash'
 export default {
   data () {
     return {
@@ -80,9 +91,10 @@ export default {
         goods_price: 0,
         goods_weight: 0,
         goods_number: 0,
-        // 商品所属的分类数组
-        goods_cat: [],
+        goods_cat: [], // 商品所属的分类数组
         pics: [], // 图片数组
+        goods_introduce: '', // 富文本编辑器内容
+        attr: [], // 表单中填写的动态参数和静态属性
       }, // 添加商品的表单对象
       addFormRules: {
         goods_name: [
@@ -125,6 +137,8 @@ export default {
       headerObj: {
         Authorization: window.sessionStorage.getItem('token')
       }, // 图片上传组件的headers请求头对象
+      previewPath: '', // 预览的图片路径，为绝对路径
+      previewVisible: false // 预览窗口显示与隐藏
     }
   },
   created () {
@@ -190,8 +204,11 @@ export default {
       }
     },
     // 处理图片预览效果
-    handlePreview () {
-
+    handlePreview (file) {
+      console.log('file', file);
+      this.previewPath = file.response.data.url
+      this.previewVisible = true
+      // console.log('test');
     },
     // 处理移除图片的操作
     handleRemove (file) {
@@ -202,7 +219,6 @@ export default {
       const i = this.addForm.pics.findIndex(item => item.pic === filePath)
       // 3. 调用数组的 splice 方法，把图片信息对象从pics数组中移除
       this.addForm.pics.splice(i, 1)
-      console.log('thjis.', this.addForm);
     },
     // 监听图片上传成功事件，可以拿到服务器传的临时路径
     handleSuccess (res) {
@@ -210,7 +226,38 @@ export default {
       const picInfo = { pic: res.data.tmp_path }
       // 2. 将图片信息对象push到数组中
       this.addForm.pics.push(picInfo)
-      console.log('thjis1111', this.addForm);
+    },
+    add () {
+      this.$refs.addFormRef.validate(async valid => {
+        if (!valid) {
+          return this.$message.error('请填写必要的表单项！')
+        }
+        // 执行添加的业务逻辑
+        // 由于这里修改了goods_cat之后，之前级联选择器绑定的数据就变成了字符串，所以就会报错
+        // 这里需要提交的表单数据 addForm 进行深拷贝
+        // 使用了包 lodash 的 cloneDeep
+        const form = _.cloneDeep(this.addForm)
+        form.goods_cat = form.goods_cat.join(',')
+        // 处理动态参数
+        this.manyTableData.forEach(item => {
+          const newInfo = { attr_id: item.attr_id, attr_value: item.attr_vals }
+          this.addForm.attrs.push(newInfo)
+        })
+        // 处理静态属性
+        this.onlyTableData.forEach(item => {
+          const newInfo = { attr_id: item.attr_id, attr_value: item.attr_vals }
+          this.addForm.attrs.push(newInfo)
+        })
+        form.attrs = this.addForm.attrs
+        // 发起请求添加商品，商品的名称，必须是唯一的
+        const { data: res } = await this.$http.post('goods', form)
+        console.log('res', res);
+        if (res.meta.status !== 201) {
+          return this.$message.error('添加商品失败！')
+        }
+        this.$message.success('添加商品成功！')
+        this.$router.push('/goods')
+      })
     }
   },
   computed: {
@@ -228,5 +275,11 @@ export default {
 <style lang="less" scoped>
 .el-checkbox {
   margin: 0 5px 0 0;
+}
+.previewImg {
+  width: 100%;
+}
+.btn-add {
+  margin-top: 15px;
 }
 </style>

@@ -18,16 +18,26 @@ import {
   reqSongDetail,
   reqMusicLyric
 } from '@/api/discover'
-import { reqMvDetail, reqMvDataDetail, reqMvSimi } from '@/api/reqMv'
+import {
+  reqMvDetail,
+  reqMvDataDetail,
+  reqMvSimi
+} from '@/api/reqMv'
 export default {
   // 获取用户登录信息
-  async getUserInfo ({ commit }, payload) {
-    console.log('getUserInfo')
+  async getUserInfo({
+    commit
+  }, payload) {
+    // console.log('getUserInfo')
     let obj = {}
     let myList = []
     let subList = []
-    const { data: res } = await reqPhoneLogin(payload)
-    const { data: userList } = await reqUserPlayList(res.profile.userId)
+    const {
+      data: res
+    } = await reqPhoneLogin(payload)
+    const {
+      data: userList
+    } = await reqUserPlayList(res.profile.userId)
     userList.playlist.find(item => {
       if (item.userId === res.profile.userId) {
         myList.push(item)
@@ -43,19 +53,33 @@ export default {
       commit(RECEIVE_USER_INFO, obj)
     }, 300)
   },
-  async getUserData ({ commit }) {
-    const { data: { data: res } } = await reqLoginState()
+  async getUserData({
+    commit
+  }) {
+    const {
+      data: {
+        data: res
+      }
+    } = await reqLoginState()
     commit(RECEIVE_USER_INFO, res.profile)
   },
   /**
    * @_mv视频数据获取
    **/
-  async getMvDetail ({ commit }, id) {
-    const { data: res } = await reqMvDetail(id)
+  async getMvDetail({
+    commit
+  }, id) {
     const {
-      data: { data: mvData }
+      data: res
+    } = await reqMvDetail(id)
+    const {
+      data: {
+        data: mvData
+      }
     } = await reqMvDataDetail(id)
-    const { data: res1 } = await reqMvSimi(id)
+    const {
+      data: res1
+    } = await reqMvSimi(id)
     const obj = {}
     obj.data = res.data
     obj.url = mvData.url
@@ -65,7 +89,9 @@ export default {
   /**
    * @获取歌单详情
    * **/
-  async getSongListDetail ({ commit }, id) {
+  async getSongListDetail({
+    commit
+  }, id) {
     const res = await reqSongListDetail(id)
     commit(RECEIVE_SONGS_DETAIL, res.data.playlist)
     commit(RECEIVE_MUSIC_LIST, res.data.playlist.tracks)
@@ -74,14 +100,22 @@ export default {
   /**
    * @获取播放音乐信息
    * **/
-  async getAudioInfo ({ commit }, payload) {
+  async getAudioInfo({
+    commit
+  }, payload) {
     console.log(payload)
     const {
-      data: { data: res }
+      data: {
+        data: res
+      }
     } = await reqPlayMusic(payload.id)
-    const { data: song } = await reqSongDetail(payload.id)
-    const { data: lyric } = await reqMusicLyric(payload.id)
-    console.log(lyric)
+    const {
+      data: song
+    } = await reqSongDetail(payload.id)
+    const {
+      data: lyric
+    } = await reqMusicLyric(payload.id)
+    // console.log(lyric)
     const obj = {}
     obj.info = song.songs[0]
     lyric.lrc ? (obj.lyric = lyric.lrc.lyric) : '没有歌词!'

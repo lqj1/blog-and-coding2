@@ -1,15 +1,7 @@
 <template>
   <div class="asidenav">
-    <el-menu
-      router
-      active-text-color="red"
-      default-active="/home/individuation"
-    >
-      <el-menu-item
-        :index="item.path"
-        :key="index"
-        v-for="(item, index) in navMenu"
-      >
+    <el-menu router active-text-color="red" default-active="/home/individuation">
+      <el-menu-item :index="item.path" :key="index" v-for="(item, index) in navMenu">
         <template slot="title">
           <i class="iconfont" :class="item.icon"></i>
           <span class="song_">{{ item.menu }}</span>
@@ -23,25 +15,16 @@
           <i class="iconfont icon-diqiu"></i>
           <span class="song_">创建的歌单</span>
         </template>
-        <el-menu-item
-          @click="songListClick(item)"
-          v-for="(item, index) in myList"
-          :key="index"
-        >
+        <el-menu-item @click="songListClick(item)" v-for="(item, index) in myList" :key="index">
           <i class="iconfont icon-yinyue"></i> {{ item.name }}
         </el-menu-item>
       </el-submenu>
 
       <el-submenu index="2">
         <template slot="title">
-          <i class="iconfont icon-diqiu"></i
-          ><span class="song_">收藏的歌单</span>
+          <i class="iconfont icon-diqiu"></i><span class="song_">收藏的歌单</span>
         </template>
-        <el-menu-item
-          @click="songListClick(item)"
-          v-for="(item, index) in subList"
-          :key="index"
-        >
+        <el-menu-item @click="songListClick(item)" v-for="(item, index) in subList" :key="index">
           <i class="iconfont icon-yinyue"></i> {{ item.name }}
         </el-menu-item>
       </el-submenu>
@@ -53,7 +36,7 @@
 import { mapState } from 'vuex'
 export default {
   name: 'HomeAsideNavBar',
-  data() {
+  data () {
     return {
       navMenu: [
         {
@@ -72,7 +55,7 @@ export default {
     }
   },
   methods: {
-    songListClick(item) {
+    songListClick (item) {
       window.sessionStorage.setItem('id', item.id)
       this.$bus.$emit('newDetail', item.id)
       this.$router.push(`/home/detail/${item.id}`)
@@ -83,7 +66,7 @@ export default {
   },
   watch: {
     userInfo: {
-      handler(n, o) {
+      handler (n, o) {
         this.myList = n.myList
         this.subList = n.subList
       }
@@ -93,25 +76,25 @@ export default {
 </script>
 
 <style scoped>
-.el-menu-item {
-  font-size: 13px;
-}
-.song_ {
-  font-size: 12px !important;
-  margin-left: 10px;
-}
-.author {
-  width: 100%;
-}
-.img {
-  position: absolute;
-  bottom: 100px;
-  width: 200px;
-}
-.img div {
-  padding: 10px;
-}
-img {
-  width: 100%;
-}
+  .el-menu-item {
+    font-size: 13px;
+  }
+  .song_ {
+    font-size: 12px !important;
+    margin-left: 10px;
+  }
+  .author {
+    width: 100%;
+  }
+  .img {
+    position: absolute;
+    bottom: 100px;
+    width: 200px;
+  }
+  .img div {
+    padding: 10px;
+  }
+  img {
+    width: 100%;
+  }
 </style>

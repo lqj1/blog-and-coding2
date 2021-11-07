@@ -2,9 +2,9 @@
   <div class='individuation'>
     <individuation-swiper :banners='banners' />
     <recommend-song :recommend-songs="recommendSongs"></recommend-song>
-    <mv :str="'独家放松'" :mv="privateContent"/>
-    <new-song :new-songs="newSongs"/>
-    <mv :str="'推荐MV'" :mv="mv"/>
+    <mv :str="'独家放松'" :mv="privateContent" />
+    <new-song :new-songs="newSongs" />
+    <mv :str="'推荐MV'" :mv="mv" />
     <div class="box"></div>
   </div>
 </template>
@@ -50,7 +50,7 @@ export default {
     const { data: privateContent } = await reqPrivatecontent()
     this.banners = res.banners
     this.recommendSongs = response.result
-    this.newSongs = newSong.result.slice(0,9)
+    this.newSongs = newSong.result.slice(0, 9)
     this.mv = mv.result.slice(0, 3)
     // this.recommendSongs.unshift(reList.recommend[0])
     this.privateContent = privateContent.result
@@ -60,13 +60,13 @@ export default {
 </script>
 
 <style scoped lang="less">
-.individuation {
-  width: 100%;
-  height: 100%;
-}
-.box {
-  width: 100px;
-  height: 100px;
-  margin: 0  200px;
-}
+  .individuation {
+    width: 100%;
+    height: 100%;
+  }
+  .box {
+    width: 100px;
+    height: 100px;
+    margin: 0 200px;
+  }
 </style>
