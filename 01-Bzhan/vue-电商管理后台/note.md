@@ -14,6 +14,13 @@
 - mysql
 - sequelize
 
+## 前端项目初始化
+
+1. 初始化项目`vue create vue-shop`
+2. 运行`vue ui`报错`Error: ENOENT: no such file or directory, scandir '..\node_modules\@vue\cli-services\locales'`
+   - Node.js v17.4.0, npm 8.3.1
+   - 解决方法：在提示的插件下面去手动创建 locales 文件夹，可解决
+
 ## 1. 登录/退出功能
 
 ### 登录业务流程
