@@ -10,3 +10,11 @@
 - element-ui
 - axios
 - echarts
+
+## phpStudy
+
+- 可以不需要安装 mysql 模拟数据库
+
+## 知识点学习
+
+- 学习项目中 note.md 笔记中的相关技术点
