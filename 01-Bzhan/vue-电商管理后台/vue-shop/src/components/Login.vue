@@ -25,7 +25,8 @@
         </el-form-item>
         <!-- 按钮区域 -->
         <el-form-item class="btns">
-          <el-button type="primary">登录</el-button>
+          <el-button type="primary"
+                     @click="login">登录</el-button>
           <el-button type="info"
                      @click="resetLoginForm">重置</el-button>
         </el-form-item>
@@ -40,8 +41,8 @@ export default {
     return {
       // 这是登录表单的数据绑定对象
       loginForm: {
-        username: '',
-        password: ''
+        username: 'admin',
+        password: '123456'
       },
       // 这是表单验证规则对象
       loginRule: {
@@ -50,7 +51,7 @@ export default {
             required: true, message: '请输入登录名称', trigger: 'blur'
           },
           {
-            min: 3, max: 5, message: '长度在3-10个字符之间'
+            min: 3, max: 10, message: '长度在3-10个字符之间'
           }
         ],
         password: [
@@ -66,6 +67,22 @@ export default {
     // 点击重置登录表单
     resetLoginForm () {
       this.$refs.loginFormRef.resetFields();
+    },
+    login () {
+      this.$refs.loginFormRef.validate(async valid => {
+        // 验证通过会返回 true, 否则返回false
+        if (!valid) return;
+        const { data: res } = await this.$http.post('login', this.loginForm)
+        console.log('res', res);
+        if (res.meta.status !== 200) {
+          return this.$message.error('登录失败！')
+        }
+        this.$message.success('登录成功！')
+        // 将登陆成功之后的 token 保存到客户端的 sessionStorage 中
+        window.sessionStorage.setItem('token', res.data.token)
+        // 跳转到后台主页，路由地址是 /home
+        this.$router.push('/home')
+      })
     }
   }
 }
