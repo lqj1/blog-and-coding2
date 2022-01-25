@@ -1,9 +1,23 @@
-import Vue from 'vue';
-import { Button } from 'element-ui';
-import { Input } from 'element-ui';
-import { Form, FormItem } from 'element-ui';
-// 导入弹框提示组件
-import { Message } from 'element-ui';
+import Vue from 'vue'
+import {
+  Button,
+  Input,
+  Form,
+  FormItem,
+  Message,
+  Container,
+  Header,
+  Aside,
+  Main,
+} from 'element-ui'
 
-Vue.use(Button).use(Form).use(FormItem).use(Input);
-Vue.prototype.$message = Message;
+Vue.use(Button)
+  .use(Form)
+  .use(FormItem)
+  .use(Input)
+  .use(Container)
+  .use(Header)
+  .use(Aside)
+  .use(Main)
+
+Vue.prototype.$message = Message
