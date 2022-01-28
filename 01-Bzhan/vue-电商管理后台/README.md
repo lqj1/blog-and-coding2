@@ -180,10 +180,10 @@ this.$router.push('/login');
 
 ```javascript
 axios.interceptors.request.use(config => {
-  // 为请求头对象(headers)，添加 Token 验证的 Authorization 字段
-  config.headers.Authorization = window.sessionStorage.getItem('token');
-  return config; // 必须return config
-});
+    // 为请求头对象(headers)，添加 Token 验证的 Authorization 字段
+    config.headers.Authorization = window.sessionStorage.getItem('token')
+    return config  // 必须 return config
+})
 ```
 
 - 登录的接口没有颁发 token，所以登录接口请求中的 Authorization 的值为 null
@@ -212,13 +212,13 @@ axios.interceptors.request.use(config => {
 
 ### 用户列表的开发
 
-- 面包屑导航
+- 面包屑导航  `el-breadcrumb`
 - el-table 表格渲染数据，通过 border 添加边框，stripe 设置斑马纹（隔行变色）
 - `<el-table-column type="index"></el-table-column>`为表格添加索引列
 - 表格的作用域插槽
   - 其中 {{scope.row}} 表示该行的数据
 
-```javascript
+```html
  <el-table-column label="状态" prop="mg_state">
   <template slot-scope="scope">
     {{scope.row.mg_state}}
@@ -258,29 +258,34 @@ addFormRules: {
 ```
 
 - 自定义验证规则
-  - 在 addFormRules 通过 validator 添加方法
+  - 在 el-form 标签中添加 :rules="addFormRules"
+  - 在 addFormRules 通过 validator 添加（方法/函数）
   - 在 data 中，data 的 return 外面通过 var 定义验证的规则
 
+
 ```javascript
-// 验证邮箱的规则
-var checkEmail = (rule, value, cb) => {
-  // 验证邮箱的正则表达式
-  const regEmail = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
-  if (regEmail.test(value)) {
-    // 合法的邮箱，直接返回 cb()
-    return cb();
-  }
-  // 不合法，通过cb返回 new Error()
-  cb(new Error('请输入合法的邮箱'));
-};
-// 验证手机号的规则
-var checkMobile = (rule, value, cb) => {
-  const regMobile = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
-  if (regMobile.test(value)) {
-    return cb();
-  }
-  cb(new Error('请输入合法的手机号'));
-};
+data() {
+    // 验证邮箱的规则
+    var checkEmail = (rule, value, cb) => {
+      // 验证邮箱的正则表达式
+      const regEmail = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
+      if (regEmail.test(value)) {
+        // 合法的邮箱，直接返回 cb()
+        return cb();
+      }
+      // 不合法，通过cb返回 new Error()
+      cb(new Error('请输入合法的邮箱'));
+    };
+    // 验证手机号的规则
+    var checkMobile = (rule, value, cb) => {
+      const regMobile = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
+      if (regMobile.test(value)) {
+        return cb();
+      }
+      cb(new Error('请输入合法的手机号'));
+    };
+}
+
 ```
 
 #### 重置表单
