@@ -380,7 +380,7 @@ async removeUserById (id) {
 
 #### el-tree 组件
 
-```javascript
+```html
 <el-tree :data="rightslist" :props="treeProps" show-checkbox node-key="id" default-expand-all :default-checked-keys="defKeys" ref="treeRef"></el-tree>
 ```
 
@@ -419,9 +419,9 @@ import TreeTable from 'vue-table-with-tree-grid';
 Vue.component('tree-table', TreeTable);
 ```
 
-#### vue-table-with-tree-grid 插件
+#### vue-table-with-tree-grid 插件（一种表格内某一个格可以有展开的树形结构）
 
-```javascript
+```html
 <tree-table class="treeTable" :data="catelist" :columns="columns" :selection-type="false" :expand-type="false" show-index index-text="#" border :show-row-hover="false">
   // <!-- 是否有效 -->
   <template slot="isok" slot-scope="scope">
@@ -442,7 +442,7 @@ Vue.component('tree-table', TreeTable);
 </tree-table>
 ```
 
-- `·data`数据
+- `data`数据
 - `columns`表格各列的配置
   - label: 列标题
 
@@ -547,7 +547,7 @@ cateProps: {
 - 静态参数和动态参数：静态参数指的是商品的尺寸、颜色等，静态参数就是该手机或其他的品牌型号等不可更改的参数
 - 警告框, `el-alert`
 
-```javascript
+```html
 //  <!-- 头部的警告区 -->
 <el-alert title="注意：只允许为第三级分类设置相关参数" type="warning" :closable="false" show-icon></el-alert>
 ```
@@ -557,7 +557,7 @@ cateProps: {
 - 展开行添加数据
   - 在展开行通过作用域插槽的方式接收数据
 
-```javascript
+```html
 //  <!-- 展开行 -->
 <el-table-column type="expand">
   <template slot-scope="scope">
@@ -602,7 +602,7 @@ showInput (row) {
 - 在 main.js 中配置全局过滤器
 - 全局格式化时间的过滤器
 
-```javascript
+```html
 // main.js
 Vue.filter('dataFormat', function (originVal) {
   // 根据给定时间得到时间对象
@@ -629,7 +629,7 @@ Vue.filter('dataFormat', function (originVal) {
 
 - 引入 Steps、Step
 
-```javascript
+```html
 <el-steps :space="200" :active="1" finish-status="success" align-center>
   <el-step title="基本信息"></el-step>
   <el-step title="商品参数"></el-step>
@@ -641,7 +641,7 @@ Vue.filter('dataFormat', function (originVal) {
 
 #### 居左显示的 tab
 
-```javascript
+```html
 <el-tabs :tab-position="'left'" style="height: 200px;">
   <el-tab-pane label="用户管理">用户管理</el-tab-pane>
   <el-tab-pane label="配置管理">配置管理</el-tab-pane>
@@ -652,7 +652,7 @@ Vue.filter('dataFormat', function (originVal) {
 
 #### 步骤条与 tab 面板联动
 
-```javascript
+```html
 // <!-- 步骤条 -->
 // 这里减去0可以将字符串变成数字
 <el-steps :space="200" :active="activeIndex-0" finish-status="success" align-center>
@@ -715,7 +715,7 @@ beforeTabLeave (activeName, oldActiveName) {
 
 #### 上传图片
 
-```javascript
+```html
 <el-upload :action="uploadURL" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList"
   list-type="picture" :headers="headerObj" :on-success="handleSuccess">
   <el-button size="small" type="primary">Click to upload</el-button>

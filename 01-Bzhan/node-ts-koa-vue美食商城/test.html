@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      button.active {
+        background-color: yellow;
+      }
+      p {
+        display: none;
+      }
+      p.active {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <button class="active">按钮1</button>
+    <button>按钮2</button>
+    <button>按钮3</button>
+    <p class="active">内容1</p>
+    <p>内容2</p>
+    <p>内容3</p>
+    <script>
+      for (let i = 0; i < lis.length; i++) {
+        lis[i].onclick = function () {
+          setTimeout(() => {
+            this.style.background = 'red';
+          }, 1000);
+        };
+      }
+    </script>
+  </body>
+</html>

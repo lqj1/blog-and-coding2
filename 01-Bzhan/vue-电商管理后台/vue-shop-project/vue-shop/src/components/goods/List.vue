@@ -10,38 +10,64 @@
     <el-card class="box-card">
       <el-row>
         <el-col :span="8">
-          <el-input placeholder="请输入搜索内容" v-model="queryInfo.query" clearable @clear="getGoodsList">
-            <el-button slot="append" icon="el-icon-search" @click="getGoodsList">
+          <el-input placeholder="请输入搜索内容"
+                    v-model="queryInfo.query"
+                    clearable
+                    @clear="getGoodsList">
+            <el-button slot="append"
+                       icon="el-icon-search"
+                       @click="getGoodsList">
             </el-button>
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary" class="add-goods" @click="goAddpage">添加商品</el-button>
+          <el-button type="primary"
+                     class="add-goods"
+                     @click="goAddpage">添加商品</el-button>
         </el-col>
       </el-row>
       <!-- table表格区域 -->
-      <el-table :data="goodslist" border stripe>
+      <el-table :data="goodslist"
+                border
+                stripe>
         <el-table-column type="index"></el-table-column>
-        <el-table-column label="商品名称" prop="goods_name"></el-table-column>
-        <el-table-column label="商品价格" prop="goods_price" width="100px"></el-table-column>
-        <el-table-column label="商品重量" prop="goods_weight" width="100px"></el-table-column>
-        <el-table-column label="商品创建时间" prop="add_time" width="200px">
+        <el-table-column label="商品名称"
+                         prop="goods_name"></el-table-column>
+        <el-table-column label="商品价格"
+                         prop="goods_price"
+                         width="100px"></el-table-column>
+        <el-table-column label="商品重量"
+                         prop="goods_weight"
+                         width="100px"></el-table-column>
+        <el-table-column label="商品创建时间"
+                         prop="add_time"
+                         width="200px">
           <template slot-scope="scope">
             {{scope.row.add_time | dataFormat}}
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="180px">
+        <el-table-column label="操作"
+                         width="180px">
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-edit" size="mini">编辑</el-button>
-            <el-button type="danger" icon="el-icon-delete" size="mini" @click="removeById(scope.row.goods_id)">删除
+            <el-button type="primary"
+                       icon="el-icon-edit"
+                       size="mini">编辑</el-button>
+            <el-button type="danger"
+                       icon="el-icon-delete"
+                       size="mini"
+                       @click="removeById(scope.row.goods_id)">删除
             </el-button>
           </template>
         </el-table-column>
       </el-table>
       <!-- 分页区域 -->
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-        :current-page="queryInfo.pagenum" :page-sizes="[5, 10, 15, 20]" :page-size="queryInfo.pagesize"
-        layout="total, sizes, prev, pager, next, jumper" :total="total">
+      <el-pagination @size-change="handleSizeChange"
+                     @current-change="handleCurrentChange"
+                     :current-page="queryInfo.pagenum"
+                     :page-sizes="[5, 10, 15, 20]"
+                     :page-size="queryInfo.pagesize"
+                     layout="total, sizes, prev, pager, next, jumper"
+                     :total="total">
       </el-pagination>
     </el-card>
   </div>
@@ -73,8 +99,6 @@ export default {
       if (res.meta.status !== 200) {
         return this.$message.error('获取商品失败！')
       }
-      // this.$message.success('获取商品成功！')
-      // console.log('res', res.data);
       this.goodslist = res.data.goods
       this.total = res.data.total
     },
