@@ -1,23 +1,23 @@
+// import { createStore } from 'vuex'
+// import app from './modules/app'
+// import getters from './getters'
+// export default createStore({
+//   modules: {
+//     app
+//   },
+//   getters
+// })
 import { login as loginApi } from '@/api/login'
 import router from '@/router'
-import { setTokenTime } from '@/utils/auth'
 export default {
   namespaced: true,
   state: () => ({
-    token: localStorage.getItem('token') || '',
-    siderType: true,
-    lang: localStorage.getItem('lang') || 'zh'
+    token: localStorage.getItem('token') || ''
   }),
   mutations: {
     setToken(state, token) {
       state.token = token
       localStorage.setItem('token', token)
-    },
-    changeSiderType(state) {
-      state.siderType = !state.siderType
-    },
-    changLang (state, lang) {
-      state.lang = lang
     }
   },
   actions: {
@@ -25,22 +25,14 @@ export default {
       return new Promise((resolve, reject) => {
         loginApi(userInfo)
           .then((res) => {
-            console.log(res)
-            commit('setToken', res.token)
-            setTokenTime()
-            router.replace('/')
+            commit('setToken', res.token) // 成功之后设置token
+            router.replace('/') // 成功后跳转首页
             resolve()
           })
           .catch((err) => {
             reject(err)
           })
       })
-    },
-    // 退出
-    logout({ commit }) {
-      commit('setToken', '')
-      localStorage.clear()
-      router.replace('/login')
     }
   }
 }
