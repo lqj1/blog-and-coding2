@@ -1,7 +1,13 @@
 <template>
   <div :class="program + 'playlist'">
-    <div class="playlist-item" v-for="(item, index) in musicList" :key="index" @mouseenter="handleEnter(index)"
-      @mouseleave="handleLeave(index)" @click="enterMusicListDetail(index)">
+    <div
+      class="playlist-item"
+      v-for="(item, index) in musicList"
+      :key="index"
+      @mouseenter="handleEnter(index)"
+      @mouseleave="handleLeave(index)"
+      @click="enterMusicListDetail(index)"
+    >
       <div class="playlist-item-container">
         <!-- 内部图片容器 -->
         <div class="playlist-item-container-group">
@@ -14,9 +20,12 @@
             </transition>
           </template>
           <transition name="playlist-slide">
-            <div class="playlist-count" v-show="
+            <div
+              class="playlist-count"
+              v-show="
                 emptyDesc ? currentIndex == index : currentIndex != index
-              ">
+              "
+            >
               <div>
                 <i class="iconfont icon-erji"></i>
                 {{ item.playCount }}
@@ -24,15 +33,16 @@
             </div>
           </transition>
           <img v-lazy="item.picUrl || item.coverImgUrl" @load="handleRefresh" />
-          <!-- 左下角的红色播放按钮 -->
           <transition name="dance-music-opacity">
             <div class="playlist-play" v-show="currentIndex == index">
               <i class="iconfont icon-icon_play"></i>
             </div>
           </transition>
         </div>
-        <!-- 图片底部显示的文字 -->
-        <div class="playlist-name" :class="[`${program + 'playlist-name-' + theme}`]">
+        <div
+          class="playlist-name"
+          :class="[`${program + 'playlist-name-' + theme}`]"
+        >
           {{ item.name }}
         </div>
       </div>
@@ -56,30 +66,30 @@ export default {
       default: false,
     },
   },
-  data () {
+  data() {
     return {
       currentIndex: null, //控制描述信息、播放次数显示隐藏
     };
   },
   methods: {
-    handleEnter (index) {
+    handleEnter(index) {
       // if (this.emptyDesc) return;
       this.currentIndex = index;
     },
-    handleLeave (index) {
+    handleLeave(index) {
       // if (this.emptyDesc) return;
       this.currentIndex = null;
     },
-    enterMusicListDetail (index) {
+    enterMusicListDetail(index) {
       this.$router.push(
         "/musiclistdetail/" +
-        this.musicList[index].id +
-        "/" +
-        new Date().getTime()
+          this.musicList[index].id +
+          "/" +
+          new Date().getTime()
       );
     },
     /**处理图片加载刷新 */
-    handleRefresh () {
+    handleRefresh() {
       if (this.imgCount == this.musicList.length) {
         this.$emit("refresh");
       }
@@ -87,7 +97,7 @@ export default {
     },
   },
   watch: {
-    musicList () {
+    musicList() {
       this.imgCount = 1;
     },
   },

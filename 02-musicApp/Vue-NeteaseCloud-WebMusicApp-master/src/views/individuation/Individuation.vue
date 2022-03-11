@@ -2,10 +2,12 @@
   <div :class="indiviClass">
     <div class="dance-music-group">
       <swiper :banner="banner" class="swiper" />
-      <h4 :class="[
+      <h4
+        :class="[
           `${program + 'indivi-h4'}`,
           `${program + 'indivi-h4-' + theme}`,
-        ]">
+        ]"
+      >
         推荐歌单
       </h4>
       <music-list :music-list="personalized" @refresh="handleRefresh" />
@@ -33,14 +35,14 @@ export default {
   mixins: [theme],
   components: { Swiper, PrivateContent, NewSongs, MusicList },
   computed: {
-    indiviClass () {
+    indiviClass() {
       return [
         `${this.program + "indivi"}`,
         `${this.program + "-indivi-" + this.theme}`,
       ];
     },
   },
-  data () {
+  data() {
     return {
       banner: null, //轮播图数据
       limit: 10, //一次获取的歌单数量
@@ -50,7 +52,7 @@ export default {
       musiclist: [],
     };
   },
-  created () {
+  created() {
     if (this.$store.state.cookie != null && this.$store.state.cookie != "") {
       this.limit = 11;
     }
@@ -73,10 +75,10 @@ export default {
     });
   },
   methods: {
-    handleRefresh () {
+    handleRefresh() {
       // this.$refs.scroll.refresh();
     },
-    playMusic (index) {
+    playMusic(index) {
       this.musiclist = [];
       for (let i in this.songList) {
         _getSongsDetail(this.songList[i].id).then((res) => {

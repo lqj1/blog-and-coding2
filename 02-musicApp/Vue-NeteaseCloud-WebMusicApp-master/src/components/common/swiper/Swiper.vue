@@ -7,11 +7,11 @@
 </template>
 <script>
 export default {
-  name: 'Swiper',
-  props: {
-    banner: {
-      type: Array,
-      default: []
+  name:'Swiper',
+  props:{
+    banner:{
+      type:Array,
+      default:[]
     }
   }
 }
