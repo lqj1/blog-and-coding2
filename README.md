@@ -1,6 +1,6 @@
 # vue-projects
 
-this is the second store to save my projects
+some projects about vue
 
 ## 文档目录
 
