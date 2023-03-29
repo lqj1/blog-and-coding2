@@ -1,7 +1,5 @@
 <template>
-  <div class="ec-panel"
-
-  >
+  <div class="ec-panel">
   girl {{ item }}
   </div>
 </template>
