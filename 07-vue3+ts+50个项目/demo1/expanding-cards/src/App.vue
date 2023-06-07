@@ -2,6 +2,27 @@
   <div class="ec-panel">
   girl {{ item }}
   </div>
+
+  <form-create
+    v-model="child.actPartRuleForm"
+    :rule="child.fields"
+    :option="option"
+    label-width="120px"
+    :ref="child.actPartRuleRef"
+  >
+    <template v-slot:type-file-upload="scope" >
+      <file-upload :scope="scope"></file-upload>
+    </template>
+    <template v-slot:type-img-uploda="scope" >
+      <img-upload :scope="scope"></img-upload>
+    </template>
+    <template v-slot:type-file="scope" >
+      <multi-img-upload :scope="scope"></multi-img-upload>
+    </template>
+  </form-create>
+
+
+
 </template>
 
 <script setup lang="ts">
