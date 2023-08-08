@@ -48,7 +48,7 @@ onMounted(() => getNewList())
   height: 406px;
 
   li {
-    width: 306px;
+    width: 306px; 
     height: 406px;
 
     background: #f0f9f4;
