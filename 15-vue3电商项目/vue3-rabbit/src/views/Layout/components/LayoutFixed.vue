@@ -3,7 +3,7 @@ import { useScroll } from '@vueuse/core'
 const { y } = useScroll(window)
 
 
-import { useCategoryStore } from "@/stores/category";
+import { useCategoryStore } from "@/stores/categoryStore";
 // 使用这里面的 categoryList
 const categoryStore = useCategoryStore()
 
